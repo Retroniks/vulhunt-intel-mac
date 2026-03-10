@@ -21,7 +21,7 @@ This is a **community compatibility and distribution fork**. It does **not** rep
 - **Platform:** macOS x86_64
 - **Main binary:** `vulhunt-ce`
 - **CLI verified:** yes
-- **Prebuilt Intel Mac binaries:** intended to be published via GitHub Releases
+- **Prebuilt Intel Mac binaries:** published via GitHub Releases
 
 Verification example:
 
@@ -34,6 +34,26 @@ Expected architecture output:
 
 ```text
 Mach-O 64-bit executable x86_64
+```
+
+## Quickstart for Intel Mac users
+
+1. Download the latest **Intel Mac** release asset from GitHub Releases.
+2. Unzip the archive.
+3. Open Terminal in the extracted folder.
+4. Make the binary executable if needed.
+5. Run the CLI help to verify the binary starts correctly.
+
+```bash
+chmod +x vulhunt-ce
+./vulhunt-ce --help
+```
+
+If macOS blocks execution on first launch, remove the quarantine attribute and try again:
+
+```bash
+xattr -d com.apple.quarantine vulhunt-ce
+./vulhunt-ce --help
 ```
 
 ## Upstream project
@@ -166,7 +186,7 @@ Options:
   - `bndb`: Scan Binary Ninja databases (requires `--features=bndb` at build time)
 - `--pretty`: Format output for human consumption and render issues to stdout
 - `--stream`: Format output as a stream of JSONL messages
-- `--compress`: Compress output JSONL stream with Zstandard
+- `--compress`: Compress output as a Zstandard-compressed JSONL stream
 
 ### Starting the MCP server
 
@@ -193,7 +213,7 @@ vulhunt-ce btp --help
 
 ## Releases
 
-Prebuilt Intel Mac binaries should be distributed via **GitHub Releases**, not committed into the repository history.
+Prebuilt Intel Mac binaries are distributed via **GitHub Releases**, not committed into the repository history.
 
 Recommended release asset naming:
 
@@ -209,4 +229,4 @@ This project remains licensed under the **GNU General Public License v3.0**. See
 
 Copyright (c) 2026 Binarly Inc. and VulHunt developers.
 
-Additional fork-specific maintenance and compatibility and distribution work in this repository is provided by **Retroniks**.
+Additional fork-specific maintenance, compatibility, and distribution work in this repository is provided by **Retroniks**.
