@@ -1,17 +1,50 @@
-# VulHunt Community Edition
+# VulHunt Community Edition for Intel Macs
 
-VulHunt is a vulnerability hunting framework developed by Binarly's Research
-team. It is designed to help security researchers and practitioners identify
-vulnerabilities in software binaries and UEFI firmware. VulHunt is built on top
-of Binarly's Binary Analysis and Inspection System (BIAS), which provides a
-powerful and flexible environment for analysing and understanding binaries.
-VulHunt integrates with the capabilities of the Binarly Transparency Platform
-(BTP) to enable large-scale vulnerability management, hunting, and triage
-capabilities.
+This repository is a **community fork** of [VulHunt Community Edition](https://github.com/vulhunt-re/vulhunt), maintained by **Retroniks** to verify, preserve, and distribute **Intel Mac builds on macOS x86_64**.
 
-VulHunt Community Edition is a free and open-source version of the VulHunt
-engine within the BTP, designed to facilitate community-developed rulepacks and
-integrations.
+The upstream project currently publishes macOS ARM64 builds. This fork exists to make **Intel Mac support** visible and practical for users who cannot or do not want to compile the project themselves.
+
+## Mission
+
+This fork is intended to help Intel Mac users by providing:
+
+- verified **macOS x86_64** build support
+- **prebuilt release binaries** via GitHub Releases
+- minimal, honest fork maintenance without rebranding the upstream project
+- a practical distribution path for users who would otherwise be excluded
+
+This is a **community compatibility and distribution fork**. It does **not** replace the upstream project and does **not** claim authorship of VulHunt itself.
+
+## Status
+
+- **Build verified on Intel Mac**
+- **Platform:** macOS x86_64
+- **Main binary:** `vulhunt-ce`
+- **CLI verified:** yes
+- **Prebuilt Intel Mac binaries:** intended to be published via GitHub Releases
+
+Verification example:
+
+```bash
+./target/release/vulhunt-ce --help
+file ./target/release/vulhunt-ce
+```
+
+Expected architecture output:
+
+```text
+Mach-O 64-bit executable x86_64
+```
+
+## Upstream project
+
+Original upstream repository:
+
+- `vulhunt-re/vulhunt`
+
+VulHunt is a vulnerability hunting framework developed by Binarly's Research team. It is designed to help security researchers and practitioners identify vulnerabilities in software binaries and UEFI firmware. VulHunt is built on top of Binarly's Binary Analysis and Inspection System (BIAS), which provides a powerful and flexible environment for analysing and understanding binaries. VulHunt integrates with the capabilities of the Binarly Transparency Platform (BTP) to enable large-scale vulnerability management, hunting, and triage capabilities.
+
+VulHunt Community Edition is a free and open-source version of the VulHunt engine within the BTP, designed to facilitate community-developed rulepacks and integrations.
 
 ## Building (with cargo-make)
 
@@ -135,76 +168,45 @@ Options:
 - `--stream`: Format output as a stream of JSONL messages
 - `--compress`: Compress output JSONL stream with Zstandard
 
-Example:
-
-```bash
-vulhunt-ce scan lib.so -o results.json -d /path/to/bias-data -r /path/to/rules --pretty
-vulhunt-ce scan firmware.ba2 --loader ba2 -o results.json -d /path/to/bias-data -r /path/to/rules --pretty
-vulhunt-ce scan project.bndb --loader bndb -o results.json -d /path/to/bias-data -r /path/to/rules --pretty
-```
-
 ### Starting the MCP server
 
-VulHunt can run as an MCP (Model Context Protocol) server for integration with AI assistants. By default, it starts a streaming HTTP server with SSE (Server-Sent Events) transport at `http://127.0.0.1:8080`:
+By default, VulHunt starts a streaming HTTP server with SSE transport at `http://127.0.0.1:8080`:
+
 ```bash
 vulhunt-ce mcp -d <BIAS_DATA> [OPTIONS]
 ```
 
-Options:
-
-- `-d, --data <BIAS_DATA>`: Directory containing auxiliary data (required). Can also be set via `BIAS_DATA` environment variable
-- `-m, --modules <MODULES>`: Directory containing VulHunt modules (optional). Can also be set via `BIAS_VULHUNT_MODULES` environment variable
-- `--stdio`: Use stdio transport instead of HTTP
-- `--host <HOST>`: Host address to bind (default: `127.0.0.1`)
-- `--port <PORT>`: Port to listen on (default: `8080`)
-
 ### BA2 archive utilities
-
-List components in a BA2 archive:
 
 ```bash
 vulhunt-ce ba2 list-components <INPUT>
-```
-
-Extract a component from a BA2 archive:
-
-```bash
 vulhunt-ce ba2 extract-component <INPUT> -o <OUTPUT> --component-id <UUID>
 ```
 
-Options:
-
-- `<INPUT>`: Path to the BA2 archive
-- `-o, --output <OUTPUT>`: Output path for the extracted component
-- `--component-id <UUID>`: UUID of the component to extract
-
 ### BTP integration
 
-Interact with the Binarly Transparency Platform (BTP). All commands require authentication:
-
-Common options:
-
-- `-u, --username <USERNAME>`: BTP username (or `BTP_USERNAME` env var)
-- `-p, --password <PASSWORD>`: BTP password (or `BTP_PASSWORD` env var)
-- `-s, --instance-slug <SLUG>`: Instance slug, e.g., `your-org.prod` (or `BTP_INSTANCE_SLUG` env var)
-
-Available commands:
+All BTP commands require authentication.
 
 ```bash
-vulhunt-ce btp push-rules <INPUTS> -r <REPOSITORY> [-t <TAG>] [--name <NAME>] [--platform <posix|uefi>] [--modules <DIR>] [--deploy-to-product <ULID> | --deploy-to-org <ULID>]
-vulhunt-ce btp list-products
-vulhunt-ce btp create-product --name <NAME> [--description]
-vulhunt-ce btp upload <FILE> --product-id <ULID> --name <NAME> --version <VERSION> [--scan]
-vulhunt-ce btp list-images --product-id <ULID>
-vulhunt-ce btp list-scans --product-id <ULID> --image-id <ULID>
-vulhunt-ce btp create-scan --product-id <ULID> --image-id <ULID>
-vulhunt-ce btp get-scan --product-id <ULID> --image-id <ULID> --scan-id <ULID>
-vulhunt-ce btp get-findings --product-id <ULID> --image-id <ULID>
-vulhunt-ce btp download-ba2 --product-id <ULID> --image-id <ULID> [--scan-id <ULID>] [-o <OUTPUT>]
+vulhunt-ce btp --help
 ```
+
+## Releases
+
+Prebuilt Intel Mac binaries should be distributed via **GitHub Releases**, not committed into the repository history.
+
+Recommended release asset naming:
+
+- `vulhunt-ce-macos-x86_64.zip`
+
+Optional:
+
+- `SHA256SUMS.txt`
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project remains licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for details.
 
 Copyright (c) 2026 Binarly Inc. and VulHunt developers.
+
+Additional fork-specific maintenance and compatibility and distribution work in this repository is provided by **Retroniks**.
